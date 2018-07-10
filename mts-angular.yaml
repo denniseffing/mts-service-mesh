@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mts-angular
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mts-angular
+        editor: vscode
+    spec:
+      containers:
+      - name: angular
+        image: denniseffing/oasp-mts-angular:nightly
+        ports:
+        - containerPort: 80
+
+---
+# Service
+kind: Service
+apiVersion: v1
+metadata:
+  name: angular
+spec:
+  selector:
+    app: mts-angular
+  type: ClusterIP
+  ports:
+  - port: 80
+    name: http

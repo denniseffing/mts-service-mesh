@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mts-java
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mts-java
+        editor: vscode
+    spec:
+      containers:
+      - name: java
+        image: denniseffing/oasp-mts-java:nightly
+        ports:
+        - containerPort: 8081
+
+---
+# Service
+kind: Service
+apiVersion: v1
+metadata:
+  name: java
+spec:
+  selector:
+    app: mts-java
+  type: ClusterIP
+  ports:
+  - port:  8081
+    name: http
