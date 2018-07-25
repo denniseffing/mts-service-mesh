@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: vistio
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - mts-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /vistio
+    route:
+    - destination:
+        host: vistio-web
+        port:
+          number: 8080
