@@ -22,34 +22,4 @@ spec:
       serverCertificate: /etc/istio/ingressgateway-certs/tls.crt
     hosts:
     - "*"
-    
----
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
-metadata:
-  name: mts
-spec:
-  hosts:
-  - "*"
-  gateways:
-  - mts-gateway
-  http:
-  - match:
-    - uri:
-        prefix: /api
-    rewrite:
-      uri: /mythaistar
-    route:
-    - destination:
-        host: java
-        port:
-          number: 8081
-  - match:
-    - uri:
-        prefix: /
-    route:
-    - destination:
-        host: angular
-        port:
-          number: 80
 
