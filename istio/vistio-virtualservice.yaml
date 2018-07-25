@@ -4,13 +4,22 @@ metadata:
   name: vistio
 spec:
   hosts:
-  - "*"
+  - vistio.local
+  - vistio.local:31380
   gateways:
   - mts-gateway
   http:
   - match:
     - uri:
-        prefix: /vistio
+        prefix: /graph
+    route:
+    - destination:
+        host: vistio-api
+        port:
+          number: 9091
+  - match:
+    - uri:
+        prefix: /
     route:
     - destination:
         host: vistio-web
