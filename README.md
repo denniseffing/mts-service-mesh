@@ -26,9 +26,14 @@ kubectl apply -f vistio-virtualservice.yaml
 
 ## 3. Deploy My Thai Star on Kubernetes
 ```bash
-# Deploy frontend and backend
-kubectl apply -f mts-java.yaml
+# Deploy single page application frontend
 kubectl apply -f mts-angular.yaml
+
+# Deploy microservice for handling bookings and reservations
+kubectl apply -f mts-java.yaml
+
+# Deploy microservice for handling dishes
+kubectl apply -f mts-dishes.yaml
 
 # Configure default ingress gateway (if you skipped step 2)
 kubectl apply -f ingress-gateway.yaml
