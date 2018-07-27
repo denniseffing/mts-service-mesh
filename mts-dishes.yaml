@@ -44,7 +44,7 @@ spec:
     spec:
       containers:
       - name: dishes
-        image: denniseffing/mts-dishes:1.0.0
+        image: denniseffing/mts-dishes:1.0.1
         ports:
         - containerPort: 8080
 ---
@@ -110,7 +110,7 @@ metadata:
     version: v1
 spec:
   containers:
-  - image: denniseffing/mts-dishes-dynamo-init:1.0.0
+  - image: denniseffing/mts-dishes-dynamo-init:1.0.1
     name: dynamo-init
   initContainers:
   - image: busybox

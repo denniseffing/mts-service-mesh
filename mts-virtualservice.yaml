@@ -11,9 +11,9 @@ spec:
   http:
   - match:
     - uri:
-        prefix: /api/services/rest/dishmanagement
+        prefix: /api/services/rest/dishmanagement/
     rewrite:
-      uri: /mythaistar/services/rest/dishmanagement
+      uri: /
     route:
     - destination:
         host: mts-dishes-api
