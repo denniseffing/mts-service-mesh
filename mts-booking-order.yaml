@@ -1,18 +1,17 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: mts-java
+  name: mts-booking-order
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: mts-java
-        editor: vscode
+        app: mts-booking-order
     spec:
       containers:
       - name: java
-        image: denniseffing/oasp-mts-java:nightly
+        image: denniseffing/mts-booking-order:1.0.0
         ports:
         - containerPort: 8081
 
@@ -21,10 +20,10 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: java
+  name: mts-booking-order
 spec:
   selector:
-    app: mts-java
+    app: mts-booking-order
   type: ClusterIP
   ports:
   - port:  8081

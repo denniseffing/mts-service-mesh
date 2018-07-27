@@ -26,7 +26,7 @@ spec:
       uri: /mythaistar
     route:
     - destination:
-        host: java
+        host: mts-booking-order
         port:
           number: 8081
   - match:
