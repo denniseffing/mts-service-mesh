@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: kiali
+  labels:
+    app: kiali
+    version: v0.6
+spec:
+  backend:
+    serviceName: kiali
+    servicePort: 20001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kiali-jaeger
+  namespace: istio-system
+  labels:
+    app: kiali
+spec:
+  type: NodePort
+  ports:
+  - name: jaeger
+    protocol: TCP
+    nodePort: 32439
+    port: 20002
+  selector:
+    app: kiali
