@@ -34,7 +34,7 @@ spec:
         prefix: /
     route:
     - destination:
-        host: angular
+        host: frontend
         port:
           number: 80
           
