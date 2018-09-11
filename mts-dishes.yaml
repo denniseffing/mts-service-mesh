@@ -12,18 +12,6 @@ spec:
     targetPort: 8080
     name: http
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: mts-dishes-dynamo
-spec:
-  ports:
-  - port: 8000
-  selector:
-    app: mts-dishes
-    tier: dynamo
-  clusterIP: None
----
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -44,75 +32,6 @@ spec:
     spec:
       containers:
       - name: dishes
-        image: denniseffing/mts-dishes:1.1.1
+        image: denniseffing/mts-dishes:1.2
         ports:
         - containerPort: 8080
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: mts-dishes-dynamo-v1
-  labels:
-    app: mts-dishes
-spec:
-  selector:
-    matchLabels:
-      app: mts-dishes
-      tier: dynamo
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      labels:
-        app: mts-dishes
-        tier: dynamo
-        version: v1
-    spec:
-      containers:
-      - image: dwmkerr/dynamodb:latest
-        name: dynamo
-        args:
-        - "-dbPath"
-        - "/data"
-        - "-sharedDb"
-        ports:
-        - containerPort: 8000
-          name: dynamo
-        volumeMounts:
-        - name: dynamo-persistent-storage
-          mountPath: /data
-      volumes:
-      - name: dynamo-persistent-storage
-        persistentVolumeClaim:
-          claimName: dynamo-pv-claim
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: dynamo-pv-claim
-  labels:
-    app: mts-dishes
-    tier: dynamo
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: mts-dishes-dynamo-init-v1
-  labels:
-    app: mts-dishes
-    tier: dynamo
-    version: v1
-spec:
-  containers:
-  - image: denniseffing/mts-dishes-dynamo-init:1.1.1
-    name: dynamo-init
-  initContainers:
-  - image: busybox
-    name: dynamo-init-wait
-    command: ['sh', '-c', 'until nslookup mts-dishes-dynamo; do echo waiting for mts-dishes-dynamo; sleep 2; done;']
