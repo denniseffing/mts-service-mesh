@@ -1,3 +1,21 @@
+#################################################################################
+# MyThaiStar Frontend service
+#################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: mts-frontend
+  labels:
+    app: mts-frontend
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+    name: http
+  selector:
+    app: mts-frontend
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -12,19 +30,7 @@ spec:
       containers:
       - name: frontend
         image: denniseffing/oasp-mts-angular:nightly
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
-
 ---
-# Service
-kind: Service
-apiVersion: v1
-metadata:
-  name: frontend
-spec:
-  selector:
-    app: mts-frontend
-  type: ClusterIP
-  ports:
-  - port: 80
-    name: http
