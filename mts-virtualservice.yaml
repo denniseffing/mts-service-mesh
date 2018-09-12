@@ -6,6 +6,7 @@ spec:
   hosts:
   - mts.local
   - mts.local:31380
+  - mts.local:31390
   gateways:
   - mts-gateway
   http:
