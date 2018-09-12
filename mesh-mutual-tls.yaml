@@ -1,0 +1,43 @@
+#################################################################################
+# Activate mesh wide mutual TLS (server side)
+# This solution...
+# ... provides each service with a strong identity representing its role to enable interoperability across clusters and clouds.
+# ... secures service-to-service communication and end-user-to-service communication.
+# ... provides a key management system to automate key and certificate generation, distribution, and rotation.
+#################################################################################
+apiVersion: "authentication.istio.io/v1alpha1"
+kind: "MeshPolicy"
+metadata:
+  name: "default"
+spec:
+  peers:
+  - mtls: {}
+---
+#################################################################################
+# Activate mesh wide mutual TLS (client side)
+#################################################################################
+apiVersion: "networking.istio.io/v1alpha3"
+kind: "DestinationRule"
+metadata:
+  name: "default"
+  namespace: "default"
+spec:
+  host: "*.local"
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+---
+#################################################################################
+# Deactivate client side mutual TLS for Kubernetes API server
+# - The API server doesn't have a sidecar
+#################################################################################
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: "api-server"
+spec:
+  host: "kubernetes.default.svc.cluster.local"
+  trafficPolicy:
+    tls:
+      mode: DISABLE
+---
