@@ -1,0 +1,90 @@
+#################################################################################
+# Frontend is accessible for everyone
+#################################################################################
+apiVersion: "rbac.istio.io/v1alpha1"
+kind: ServiceRole
+metadata:
+  name: frontend-viewer
+  namespace: default
+spec:
+  rules:
+  - services: ["mts-frontend.default.svc.cluster.local"]
+    methods: ["GET", "POST"]
+---
+apiVersion: "rbac.istio.io/v1alpha1"
+kind: ServiceRoleBinding
+metadata:
+  name: bind-frontend-viewer
+  namespace: default
+spec:
+  subjects:
+  - user: "*"
+  roleRef:
+    kind: ServiceRole
+    name: "frontend-viewer"
+---
+#################################################################################
+# Dishes is only accessible from istio-system namespace and booking order service
+#################################################################################
+apiVersion: "rbac.istio.io/v1alpha1"
+kind: ServiceRole
+metadata:
+  name: dishes-viewer
+  namespace: default
+spec:
+  rules:
+  - services: ["mts-dishes.default.svc.cluster.local"]
+    methods: ["GET", "POST"]
+---
+apiVersion: "rbac.istio.io/v1alpha1"
+kind: ServiceRoleBinding
+metadata:
+  name: bind-dishes-viewer-istio-ns
+  namespace: default
+spec:
+  subjects:
+  - user: "*"
+  - properties:
+      source.namespace: "istio-system"
+  roleRef:
+    kind: ServiceRole
+    name: dishes-viewer
+---
+apiVersion: "rbac.istio.io/v1alpha1"
+kind: ServiceRoleBinding
+metadata:
+  name: bind-dishes-viewer-booking-order
+  namespace: default
+spec:
+  subjects:
+  - user: "cluster.local/ns/default/sa/mts-booking-order"
+  roleRef:
+    kind: ServiceRole
+    name: dishes-viewer
+---
+#################################################################################
+# Booking order is only accessible from istio-system namespace
+#################################################################################
+apiVersion: "rbac.istio.io/v1alpha1"
+kind: ServiceRole
+metadata:
+  name: booking-order-viewer
+  namespace: default
+spec:
+  rules:
+  - services: ["mts-booking-order.default.svc.cluster.local"]
+    methods: ["GET", "POST"]
+---
+apiVersion: "rbac.istio.io/v1alpha1"
+kind: ServiceRoleBinding
+metadata:
+  name: bind-booking-order-viewer-istio-ns
+  namespace: default
+spec:
+  subjects:
+  - user: "*"
+  - properties:
+      source.namespace: "istio-system"
+  roleRef:
+    kind: ServiceRole
+    name: booking-order-viewer
