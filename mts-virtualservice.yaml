@@ -34,7 +34,7 @@ spec:
         prefix: /
     route:
     - destination:
-        host: frontend
+        host: mts-frontend
         port:
           number: 80
           
