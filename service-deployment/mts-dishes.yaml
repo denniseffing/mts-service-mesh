@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: mts-dishes-api
+  name: mts-dishes
 spec:
   selector:
     app: mts-dishes
@@ -15,7 +15,7 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: mts-dishes-api-v1
+  name: mts-dishes-v1
 spec:
   replicas: 1
   selector:

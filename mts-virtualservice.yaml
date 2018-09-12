@@ -16,7 +16,7 @@ spec:
       uri: /
     route:
     - destination:
-        host: mts-dishes-api
+        host: mts-dishes
         port:
           number: 80
   - match:
