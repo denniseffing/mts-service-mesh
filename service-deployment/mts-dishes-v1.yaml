@@ -1,16 +1,20 @@
+#################################################################################
+# MyThaiStar Dishes service
+#################################################################################
 apiVersion: v1
 kind: Service
 metadata:
   name: mts-dishes
-spec:
-  selector:
+  labels:
     app: mts-dishes
-    tier: api
+spec:
   type: ClusterIP
   ports:
   - port: 80
     targetPort: 8080
     name: http
+  selector:
+    app: mts-dishes
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -18,20 +22,16 @@ metadata:
   name: mts-dishes-v1
 spec:
   replicas: 1
-  selector:
-    matchLabels:
-      app: mts-dishes
-      tier: api
-      version: v1
   template:
     metadata:
       labels:
         app: mts-dishes
-        tier: api
         version: v1
     spec:
       containers:
       - name: dishes
-        image: denniseffing/mts-dishes:1.2
+        image: denniseffing/mts-dishes:1.2.1
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
+---
