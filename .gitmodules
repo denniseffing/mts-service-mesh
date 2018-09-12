@@ -1,9 +1,0 @@
-[submodule "mts-dishes"]
-	path = mts-dishes
-	url = https://github.com/denniseffing/mts-dishes
-[submodule "mts-frontend"]
-	path = mts-frontend
-	url = https://github.com/denniseffing/mts-frontend
-[submodule "mts-booking-order"]
-	path = mts-booking-order
-	url = https://github.com/denniseffing/mts-booking-order
