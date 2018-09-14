@@ -24,13 +24,10 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
-  name: mts-dishes-destination          
+  name: mts-dishes-subsets          
   namespace: default
 spec:
   host: mts-dishes
-  trafficPolicy:
-    tls:
-      mode: ISTIO_MUTUAL
   subsets:
   - name: v1
     labels:
