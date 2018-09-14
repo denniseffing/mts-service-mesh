@@ -22,8 +22,16 @@ spec:
     route:
     - destination:
         host: mts-dishes.default.svc.cluster.local
+        subset: blue
         port:
           number: 80
+      weight: 100
+    - destination:
+        host: mts-dishes.default.svc.cluster.local
+        subset: green
+        port:
+          number: 80
+      weight: 0
   - match:
     - uri:
         prefix: /api
@@ -42,4 +50,19 @@ spec:
         host: mts-frontend.default.svc.cluster.local
         port:
           number: 80
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: mts-dishes-subsets          
+  namespace: default
+spec:
+  host: mts-dishes.default.svc.cluster.local
+  subsets:
+  - name: blue
+    labels:
+      version: v1
+  - name: green
+    labels:
+      version: v2
           

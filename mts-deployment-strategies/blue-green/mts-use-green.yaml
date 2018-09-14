@@ -6,6 +6,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: mts-routes
+  namespace: default
 spec:
   hosts:
   - mts.local
@@ -25,13 +26,13 @@ spec:
         subset: blue
         port:
           number: 80
-      weight: 100
+      weight: 0
     - destination:
         host: mts-dishes.default.svc.cluster.local
         subset: green
         port:
           number: 80
-      weight: 0
+      weight: 100
   - match:
     - uri:
         prefix: /api
@@ -54,18 +55,15 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
-  name: mts-dishes-bluegreen-subsets
+  name: mts-dishes-subsets          
   namespace: default
 spec:
   host: mts-dishes.default.svc.cluster.local
-  trafficPolicy:
-    tls:
-      mode: ISTIO_MUTUAL
   subsets:
   - name: blue
     labels:
-      env: blue
+      version: v1
   - name: green
     labels:
-      env: green
+      version: v2
           
