@@ -1,0 +1,40 @@
+#################################################################################
+# Istio virtual service configuration for dishes service
+# - handles traffic going to dishes service
+# - only used for routing requests of the booking order to the most recent version of the dishes service
+#################################################################################
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: mts-dishes-routing
+spec:
+  hosts:
+  - mts-dishes
+  http:
+  - match: 
+    - sourceLabels:
+        app: mts-booking-order
+    route:
+    - destination:
+        host: mts-dishes
+        subset: v2
+        port:
+          number: 80
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: mts-dishes-destination          
+  namespace: default
+spec:
+  host: mts-dishes
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+  - name: v2
+    labels:
+      version: v2

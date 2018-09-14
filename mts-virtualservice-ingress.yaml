@@ -1,3 +1,7 @@
+#################################################################################
+# Istio virtual service configuration for ingress gateway 
+# - handles traffic coming from outside of the mesh
+#################################################################################
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
