@@ -24,7 +24,7 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
-  name: mts-dishes-subsets          
+  name: mts-dishes-version-subsets          
   namespace: default
 spec:
   host: mts-dishes
