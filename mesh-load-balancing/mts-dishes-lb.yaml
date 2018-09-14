@@ -1,0 +1,11 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: mts-dishes-lb
+spec:
+  host: mts-dishes
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+    loadBalancer:
+      simple: LEAST_CONN
