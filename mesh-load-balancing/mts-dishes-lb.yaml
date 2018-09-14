@@ -8,4 +8,4 @@ spec:
     tls:
       mode: ISTIO_MUTUAL
     loadBalancer:
-      simple: LEAST_CONN
+      simple: ROUND_ROBIN
