@@ -1,0 +1,23 @@
+#################################################################################
+# MyThaiStar Dishes service v2
+#################################################################################
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mts-dishes-v2
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: mts-dishes
+        version: v2
+        env: green
+    spec:
+      containers:
+      - name: dishes
+        image: denniseffing/mts-dishes:1.2
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+---

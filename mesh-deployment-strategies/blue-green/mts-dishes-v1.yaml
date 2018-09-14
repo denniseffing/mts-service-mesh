@@ -1,0 +1,38 @@
+#################################################################################
+# MyThaiStar Dishes service
+#################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: mts-dishes
+  labels:
+    app: mts-dishes
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8080
+    name: http
+  selector:
+    app: mts-dishes
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mts-dishes-v1
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: mts-dishes
+        version: v1
+        env: blue
+    spec:
+      containers:
+      - name: dishes
+        image: denniseffing/mts-dishes:1.2.1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+---
