@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: denniseffing/oasp-mts-angular:nightly
+        image: denniseffing/mts-frontend:1.0
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
