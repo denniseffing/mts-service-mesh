@@ -21,7 +21,7 @@ spec:
       uri: /
     route:
     - destination:
-        host: mts-dishes
+        host: mts-dishes.default.svc.cluster.local
         port:
           number: 80
   - match:
@@ -31,7 +31,7 @@ spec:
       uri: /mythaistar
     route:
     - destination:
-        host: mts-booking-order
+        host: mts-booking-order.default.svc.cluster.local
         port:
           number: 8081
   - match:
@@ -39,7 +39,7 @@ spec:
         prefix: /
     route:
     - destination:
-        host: mts-frontend
+        host: mts-frontend.default.svc.cluster.local
         port:
           number: 80
           
