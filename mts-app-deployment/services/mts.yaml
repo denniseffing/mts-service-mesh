@@ -57,7 +57,7 @@ kind: Deployment
 metadata:
   name: mts-dishes-v1
 spec:
-  replicas: 1
+  replicas: 3
   template:
     metadata:
       labels:
