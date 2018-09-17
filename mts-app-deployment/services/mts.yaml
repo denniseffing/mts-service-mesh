@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: booking-order
-        image: denniseffing/mts-booking-order:1.0.1
+        image: denniseffing/mts-booking-order:1.1
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8081
