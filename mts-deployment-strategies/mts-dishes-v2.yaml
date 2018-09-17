@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: dishes
-        image: denniseffing/mts-dishes:1.2
+        image: denniseffing/mts-dishes:2.0
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
