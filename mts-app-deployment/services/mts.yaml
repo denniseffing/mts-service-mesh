@@ -33,6 +33,18 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8081
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8082
+          initialDelaySeconds: 20
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8082
+          initialDelaySeconds: 5
+          periodSeconds: 5
 ---
 #################################################################################
 # MyThaiStar Dishes service
@@ -70,6 +82,18 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 5
 ---
 #################################################################################
 # MyThaiStar Frontend service
