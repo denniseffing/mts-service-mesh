@@ -126,7 +126,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: denniseffing/mts-frontend:1.0
+        image: denniseffing/mts-frontend:1.1
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
