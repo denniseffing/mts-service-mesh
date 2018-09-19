@@ -83,8 +83,9 @@ metadata:
 spec:
   subjects:
   - user: "*"
-  - properties:
+    properties:
       source.namespace: "istio-system"
+      request.auth.claims[http://mts.local/group]: "WAITER"
   roleRef:
     kind: ServiceRole
     name: booking-order-viewer

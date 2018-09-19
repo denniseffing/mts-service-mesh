@@ -1,0 +1,16 @@
+#################################################################################
+# Booking order is only accessible from end users with the WAITER role
+#################################################################################
+apiVersion: "rbac.istio.io/v1alpha1"
+kind: ServiceRoleBinding
+metadata:
+  name: bind-booking-order-viewer-enduser
+  namespace: default
+spec:
+  subjects:
+  - user: "*"
+  - properties:
+      request.auth.claims['http://app.example.com/group']: "WAITER"
+  roleRef:
+    kind: ServiceRole
+    name: booking-order-viewer
