@@ -19,7 +19,7 @@ spec:
         prefix: /api/services/rest/dishmanagement/
       headers:
         username: 
-          exact: effing.dennis
+          exact: canary
     rewrite:
       uri: /
     route:
