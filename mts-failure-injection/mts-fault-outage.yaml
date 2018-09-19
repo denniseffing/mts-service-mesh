@@ -1,0 +1,64 @@
+#################################################################################
+# Istio virtual service configuration with injected outages for dishes service
+#################################################################################
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: mts-routes
+spec:
+  hosts:
+  - mts.local
+  - mts.local:31380
+  - mts.local:31390
+  - mts-dishes.default.svc.cluster.local
+  gateways:
+  - mesh
+  - mts-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /api/services/rest/dishmanagement/
+      headers:
+        username: 
+          exact: fault.injection
+    - sourceLabels:
+        app: mts-booking-order
+    fault:
+      abort:
+        httpStatus: 500
+        percent: 100
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: mts-dishes.default.svc.cluster.local
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /api/services/rest/dishmanagement/
+    rewrite:
+      uri: /
+    route:
+    - destination:
+        host: mts-dishes.default.svc.cluster.local
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /api
+    rewrite:
+      uri: /mythaistar
+    route:
+    - destination:
+        host: mts-booking-order.default.svc.cluster.local
+        port:
+          number: 8081
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: mts-frontend.default.svc.cluster.local
+        port:
+          number: 80
