@@ -2,9 +2,9 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: kiali
+  namespace: istio-system
   labels:
     app: kiali
-    version: v0.6
 spec:
   backend:
     serviceName: kiali
