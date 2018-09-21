@@ -20,10 +20,13 @@ spec:
     - uri:
         prefix: /api/services/rest/dishmanagement/
       headers:
-        username: 
+        baggage-username: 
           exact: fault.injection
     - sourceLabels:
         app: mts-booking-order
+      headers:
+        baggage-username: 
+          exact: fault.injection        
     fault:
       delay:
         fixedDelay: 200ms
