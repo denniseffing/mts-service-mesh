@@ -1,3 +1,12 @@
+#################################################################################
+# Circuit breaker configuration for dishes service
+# Triggers when:
+# - More than 100 HTTP requests are pending
+# - More than two concurrent requests are being made for a connection (HTTP 2)
+# - The service returns two consecutive errors
+# Instance is ejected for three minutes and consecutive error count is checked every second.
+# The load balancing pool of the dishes service consists of two instances (v1 and v2) but only one is ejected at the same time.
+#################################################################################
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
@@ -11,79 +20,80 @@ spec:
       simple: ROUND_ROBIN
     connectionPool:
       http:
-        http2MaxRequests: 100
+        http1MaxPendingRequests: 100
         maxRequestsPerConnection: 2
     outlierDetection:
       consecutiveErrors: 2
-      interval: 30s
-      baseEjectionTime: 30s
-      maxEjectionPercent: 70
+      interval: 1s
+      baseEjectionTime: 3m
+      maxEjectionPercent: 80
 ---
 #################################################################################
-# Istio virtual service configuration with injected outages for dishes service
-# This is needed for triggering the circuit breaker
+# Scale dishes service down to only one instance
+# For demonstrating purposes
 #################################################################################
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
+apiVersion: extensions/v1beta1
+kind: Deployment
 metadata:
-  name: mts-routes
+  name: mts-dishes-v1
 spec:
-  hosts:
-  - mts.local
-  - mts.local:31380
-  - mts.local:31390
-  - mts-dishes.default.svc.cluster.local
-  gateways:
-  - mesh
-  - mts-gateway
-  http:
-  - match:
-    - uri:
-        prefix: /api/services/rest/dishmanagement/
-      headers:
-        baggage-username: 
-          exact: fault.injection
-    - sourceLabels:
-        app: mts-booking-order
-      headers:
-        baggage-username: 
-          exact: fault.injection
-    fault:
-      abort:
-        httpStatus: 500
-        percent: 10
-    rewrite:
-      uri: /
-    route:
-    - destination:
-        host: mts-dishes.default.svc.cluster.local
-        port:
-          number: 80
-  - match:
-    - uri:
-        prefix: /api/services/rest/dishmanagement/
-    rewrite:
-      uri: /
-    route:
-    - destination:
-        host: mts-dishes.default.svc.cluster.local
-        port:
-          number: 80
-  - match:
-    - uri:
-        prefix: /api
-    rewrite:
-      uri: /mythaistar
-    route:
-    - destination:
-        host: mts-booking-order.default.svc.cluster.local
-        port:
-          number: 8081
-  - match:
-    - uri:
-        prefix: /
-    route:
-    - destination:
-        host: mts-frontend.default.svc.cluster.local
-        port:
-          number: 80
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mts-dishes
+        version: v1
+    spec:
+      containers:
+      - name: dishes
+        image: denniseffing/mts-dishes:1.3
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+#################################################################################
+# Deploy v2 of dishes service that contains occasional failures
+# For demonstrating purposes
+#################################################################################
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mts-dishes-v2
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mts-dishes
+        version: v2
+    spec:
+      containers:
+      - name: dishes
+        image: denniseffing/mts-dishes:2.0-with-failures
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 5
