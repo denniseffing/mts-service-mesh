@@ -1,0 +1,55 @@
+apiVersion: config.istio.io/v1alpha2
+kind: memquota
+metadata:
+  name: handler
+  namespace: istio-system
+spec:
+  quotas:
+  - name: requestcount.quota.istio-system
+    maxAmount: 5
+    validDuration: 10s
+---
+apiVersion: config.istio.io/v1alpha2
+kind: quota
+metadata:
+  name: requestcount
+  namespace: istio-system
+spec:
+  dimensions:
+    username: request.headers["baggage-username"] | "unknown"
+---
+apiVersion: config.istio.io/v1alpha2
+kind: QuotaSpec
+metadata:
+  name: request-count
+  namespace: istio-system
+spec:
+  rules:
+  - quotas:
+    - charge: 1
+      quota: requestcount
+---
+apiVersion: config.istio.io/v1alpha2
+kind: QuotaSpecBinding
+metadata:
+  name: request-count-binding
+  namespace: istio-system
+spec:
+  quotaSpecs:
+  - name: request-count
+    namespace: istio-system
+  services:
+  - name: mts-dishes
+    namespace: default
+---
+apiVersion: config.istio.io/v1alpha2
+kind: rule
+metadata:
+  name: quota-rule
+  namespace: istio-system
+spec:
+  match: source.user == "cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account"
+  actions:
+  - handler: handler.memquota
+    instances:
+    - requestcount.quota
