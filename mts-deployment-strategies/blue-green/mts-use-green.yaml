@@ -59,6 +59,9 @@ metadata:
   namespace: default
 spec:
   host: mts-dishes.default.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL  
   subsets:
   - name: blue
     labels:
