@@ -64,7 +64,7 @@ spec:
     fault:
       delay:
         fixedDelay: 200ms
-        percent: 100
+        percent: 50
     route:
     - destination:
         host: mts-dishes.default.svc.cluster.local
