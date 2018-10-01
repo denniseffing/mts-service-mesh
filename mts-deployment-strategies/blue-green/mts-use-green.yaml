@@ -12,6 +12,7 @@ spec:
   - mts.local
   - mts.local:31380
   - mts.local:31390
+  - kube.denniseffing.de  
   gateways:
   - mts-gateway
   http:
