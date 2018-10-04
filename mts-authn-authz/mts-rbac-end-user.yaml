@@ -10,7 +10,7 @@ spec:
   subjects:
   - user: "*"
   - properties:
-      request.auth.claims['http://app.example.com/group']: "WAITER"
+      request.auth.claims['http://mts.local/group']: "WAITER"
   roleRef:
     kind: ServiceRole
     name: booking-order-viewer
