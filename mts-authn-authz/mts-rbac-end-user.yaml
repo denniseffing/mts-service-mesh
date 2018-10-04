@@ -9,7 +9,7 @@ metadata:
 spec:
   subjects:
   - user: "*"
-  - properties:
+    properties:
       request.auth.claims[http://mts.local/group]: "WAITER"
   roleRef:
     kind: ServiceRole

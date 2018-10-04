@@ -44,7 +44,7 @@ metadata:
 spec:
   subjects:
   - user: "*"
-  - properties:
+    properties:
       source.namespace: "istio-system"
   roleRef:
     kind: ServiceRole
