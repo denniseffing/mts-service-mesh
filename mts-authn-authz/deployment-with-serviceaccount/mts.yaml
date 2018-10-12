@@ -1,0 +1,106 @@
+#################################################################################
+# MyThaiStar Booking Order deployment
+#################################################################################
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: booking-order-service-account
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mts-booking-order
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mts-booking-order
+    spec:
+      serviceAccountName: booking-order-service-account
+      containers:
+      - name: booking-order
+        image: denniseffing/mts-booking-order:1.3
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8081
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8082
+          initialDelaySeconds: 70
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8082
+          initialDelaySeconds: 70
+          periodSeconds: 5
+---
+#################################################################################
+# MyThaiStar Dishes deployment
+#################################################################################
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: dishes-service-account
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mts-dishes-v1
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: mts-dishes
+        version: v1
+    spec:
+      serviceAccountName: dishes-service-account
+      containers:
+      - name: dishes
+        image: denniseffing/mts-dishes:1.3
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+#################################################################################
+# MyThaiStar Frontend deployment
+#################################################################################
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: frontend-service-account
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mts-frontend
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mts-frontend
+    spec:
+      serviceAccountName: frontend-service-account
+      containers:
+      - name: frontend
+        image: denniseffing/mts-frontend:1.5
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+---

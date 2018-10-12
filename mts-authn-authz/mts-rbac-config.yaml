@@ -57,7 +57,7 @@ metadata:
   namespace: default
 spec:
   subjects:
-  - user: "cluster.local/ns/default/sa/mts-booking-order"
+  - user: "cluster.local/ns/default/sa/booking-order-service-account"
   roleRef:
     kind: ServiceRole
     name: dishes-viewer

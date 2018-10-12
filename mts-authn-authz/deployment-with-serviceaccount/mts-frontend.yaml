@@ -1,0 +1,27 @@
+#################################################################################
+# MyThaiStar Frontend deployment
+#################################################################################
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: frontend-service-account
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mts-frontend
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mts-frontend
+    spec:
+      serviceAccountName: frontend-service-account
+      containers:
+      - name: frontend
+        image: denniseffing/mts-frontend:1.5
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+---
