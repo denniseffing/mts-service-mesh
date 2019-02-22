@@ -37,14 +37,14 @@ spec:
           httpGet:
             path: /health
             port: 8082
-          initialDelaySeconds: 70
-          periodSeconds: 10
+          initialDelaySeconds: 200
+          periodSeconds: 120
         readinessProbe:
           httpGet:
             path: /health
             port: 8082
-          initialDelaySeconds: 70
-          periodSeconds: 5
+          initialDelaySeconds: 200
+          periodSeconds: 120
 ---
 #################################################################################
 # MyThaiStar Dishes service
